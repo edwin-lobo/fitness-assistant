@@ -21,9 +21,9 @@ const PlanSection: React.FC<PlanSectionProps> = ({ headline, summary, items }) =
         <h2 className="text-3xl font-bold text-slate-900 md:text-4xl">{headline}</h2>
         <p className="text-lg leading-relaxed text-slate-600">{summary}</p>
         <ul className="space-y-3 text-sm text-slate-700">
-          <li>✔️ 3 strength days, 2 cardio days, 2 recovery days.</li>
-          <li>✔️ Warm-up and cool-down baked into every session.</li>
-          <li>✔️ Auto-adjust intensity based on how you feel.</li>
+          <li>3 strength days, 2 cardio days, 2 recovery days.</li>
+          <li>Warm-up and cool-down baked into every session.</li>
+          <li>Auto-adjust intensity based on how you feel.</li>
         </ul>
       </div>
       <div className="grid flex-1 gap-4 md:grid-cols-2">

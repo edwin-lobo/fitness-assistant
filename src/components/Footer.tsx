@@ -18,7 +18,7 @@ const Footer: React.FC = () => (
           Launch
         </a>
         <span className="text-slate-400">|</span>
-        <p className="text-slate-500">Built for the LensKeep MVP track.</p>
+        <p className="text-slate-500">Static React and Vite MVP.</p>
       </div>
     </div>
   </footer>

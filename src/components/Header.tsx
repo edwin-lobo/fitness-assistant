@@ -10,7 +10,7 @@ const Header: React.FC<HeaderProps> = ({ onCtaClick }) => (
       <div className="flex items-center gap-2">
         <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary-100 text-primary-700 font-bold">FA</div>
         <div>
-          <p className="text-sm font-semibold text-primary-600">LensKeep</p>
+          <p className="text-sm font-semibold text-primary-600">Fitness planning</p>
           <p className="text-lg font-semibold text-slate-900">Fitness Assistant</p>
         </div>
       </div>

@@ -4,6 +4,7 @@ import FeatureGrid, { type Feature } from './components/FeatureGrid';
 import Footer from './components/Footer';
 import GoalTracker, { type Goal } from './components/GoalTracker';
 import Header from './components/Header';
+import NutritionPlanner from './components/NutritionPlanner';
 import PlanSection, { type PlanItem } from './components/PlanSection';
 
 const features: Feature[] = [
@@ -70,7 +71,7 @@ const weeklyPlan: PlanItem[] = [
 const goals: Goal[] = [
   { label: 'Training consistency', progress: 82, target: '5 sessions/week' },
   { label: 'Sleep score', progress: 74, target: '7.5 hrs avg' },
-  { label: 'Vo2 max trend', progress: 68, target: '46 ml/kg/min' },
+  { label: 'Protein target adherence', progress: 71, target: '>= 1.8 g/kg' },
   { label: 'Mobility habit', progress: 60, target: '10 mins daily' },
 ];
 
@@ -90,6 +91,7 @@ const App: React.FC = () => {
           summary="Pick your goal, adjust the slider for session length, and the assistant generates a balanced week you can run as-is or tweak on the fly."
           items={weeklyPlan}
         />
+        <NutritionPlanner />
         <GoalTracker goals={goals} />
         <CTASection onPrimaryClick={handleCta} />
       </main>
@@ -184,41 +186,53 @@ const HeroSection: React.FC<{ onCtaClick: () => void }> = ({ onCtaClick }) => (
   </section>
 );
 
-const SparklesIcon = () => (
+function SparklesIcon() {
+  return (
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="h-5 w-5">
     <path d="M11 2.5 9 8l-5.5 2L9 12l2 5.5L13 12l5.5-2L13 8 11 2.5Zm9 3-1 3-3 1 3 1 1 3 1-3 3-1-3-1-1-3Zm-16 8-1 3-3 1 3 1 1 3 1-3 3-1-3-1-1-3Z" />
   </svg>
-);
+  );
+}
 
-const CalendarIcon = () => (
+function CalendarIcon() {
+  return (
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" className="h-5 w-5">
     <rect x="3" y="5" width="18" height="16" rx="3" />
     <path d="M16 3v4M8 3v4M3 11h18" />
   </svg>
-);
+  );
+}
 
-const CheckIcon = () => (
+function CheckIcon() {
+  return (
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" className="h-5 w-5">
     <path strokeLinecap="round" strokeLinejoin="round" d="m5 13 4 4L19 7" />
   </svg>
-);
+  );
+}
 
-const HeartIcon = () => (
+function HeartIcon() {
+  return (
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" className="h-5 w-5">
     <path d="M12 21s-7-4.35-7-10a5 5 0 0 1 9-2.7A5 5 0 0 1 19 11c0 5.65-7 10-7 10Z" />
   </svg>
-);
+  );
+}
 
-const BoltIcon = () => (
+function BoltIcon() {
+  return (
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="h-5 w-5">
     <path d="m13 2-8 11h6v9l8-12h-6l.04-8Z" />
   </svg>
-);
+  );
+}
 
-const CloudIcon = () => (
+function CloudIcon() {
+  return (
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" className="h-5 w-5">
     <path d="M7 18h10a4 4 0 1 0-.9-7.9A6 6 0 0 0 5 11a4.5 4.5 0 0 0 2 8" />
   </svg>
-);
+  );
+}
 
 export default App;

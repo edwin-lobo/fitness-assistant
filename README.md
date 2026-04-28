@@ -1,82 +1,61 @@
-# Fitness Assistant MVP
+# Fitness Assistant
 
-A static single-page experience for the LensKeep fitness assistant MVP. Built with React, TypeScript, Vite, and Tailwind CSS so it can be deployed as a lightweight S3 website.
+Static React, TypeScript, and Vite app for the fitness assistant MVP.
 
-> The project now lives in its own repository at https://github.com/edwin-lobo/fitness-assistant. Use the instructions in this README to set up AWS + GitHub OIDC and deploy from that repository.
-
-## Getting started
+## Local development
 
 ```bash
-cd fitness-assistant
 npm install
 npm run dev
 ```
 
-> If your network restricts access to the npm registry, set the registry that works in your environment before running `npm install`.
+If your environment restricts access to the npm registry, configure the registry that works for you before running `npm install`.
 
-## Production build
+## Scripts
 
 ```bash
 npm run build
+npm run lint
+npm run preview
+npm run test:e2e
 ```
 
-The static assets will be emitted to `dist/` and can be hosted on Amazon S3 or fronted by CloudFront.
+`npm run build` emits the production assets to `dist/`.
 
-## Deploying to S3 (summary)
+## Nutrition MVP
 
-1. Create or choose an S3 bucket and enable static website hosting.
-2. Run `npm run build` and upload the `dist/` contents to the bucket root.
-3. Set the index document to `index.html` and adjust the bucket policy for public read (or serve privately behind CloudFront).
-4. For CloudFront, point the origin at the bucket and cache the static assets with long TTLs.
+The nutrition feature is a household-first planner for two adults who want lower-friction weekly planning and fewer processed foods.
 
-### GitHub Actions + AWS OIDC deployment
+- `docs/nutrition-mvp-spec.md` defines the MVP scope, out-of-scope items, and week-one success metrics.
+- `docs/nutrition-data-model.md` documents the household, member, meal template, weekly plan, and grocery checklist model.
+- `docs/backlog/nutrition-mvp-backlog.md` links the nutrition backlog issues and priority sequence.
 
-- The repository includes `.github/workflows/deploy.yml`, which builds the Vite app and syncs `dist/` into S3.
-- Set repository/environment **variables**:
-  - `AWS_REGION` – target AWS region.
-  - `FITNESS_ASSISTANT_S3_BUCKET` – bucket name where the static site is published.
-  - `FITNESS_ASSISTANT_CLOUDFRONT_ID` (optional) – CloudFront distribution ID for cache invalidations.
-- Set repository **secrets**:
-  - `FITNESS_ASSISTANT_DEPLOY_ROLE_ARN` – IAM role ARN assumed via GitHub OIDC.
+The current app supports editable household member profiles, low-choice weekly meal planning, grocery checklist generation, and copy/email/text output for manual FamilyWall handoff.
 
-Recommended IAM trust policy (scope to this repo and branch):
+## Testing
 
-```json
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Effect": "Allow",
-      "Principal": { "Federated": "arn:aws:iam::<ACCOUNT_ID>:oidc-provider/token.actions.githubusercontent.com" },
-      "Action": "sts:AssumeRoleWithWebIdentity",
-      "Condition": {
-        "StringEquals": {
-          "token.actions.githubusercontent.com:aud": "sts.amazonaws.com",
-          "token.actions.githubusercontent.com:sub": "repo:edwin-lobo/fitness-assistant:ref:refs/heads/main"
-        }
-      }
-    }
-  ]
-}
-```
-
-The role needs S3 write permissions for the target bucket and optional CloudFront invalidation rights. The workflow uses `actions/configure-aws-credentials` with the role ARN secret and the region/bucket identifiers from repository variables so no long-lived AWS keys are stored in GitHub.
-
-## Linting
+The repo includes Playwright browser tests for the nutrition planner in `tests/e2e/`.
 
 ```bash
-npm run lint
+npm run build
+npm run test:e2e
 ```
+
+The Playwright config starts `npm run preview` automatically against the built app. The CI workflow in `.github/workflows/ci.yml` runs lint, build, and the Playwright suite for pull requests and pushes to `main`.
+
+## Deployment
+
+This repo includes `.github/workflows/deploy-pages.yml` to publish the app to GitHub Pages on pushes to `main`.
+
+1. In GitHub, open `Settings -> Pages` and set the source to `GitHub Actions`.
+2. Push to `main` or run the workflow manually from the Actions tab.
+3. The workflow builds with `VITE_BASE_PATH=/<repo-name>/` so assets resolve correctly under `https://<owner>.github.io/<repo-name>/`.
+
+For a custom domain, set the repository variable `PAGES_CNAME`. The workflow writes `dist/CNAME` automatically when that variable is present.
 
 ## Project structure
 
-- `src/components/` – presentational React components for the landing page sections.
-- `src/App.tsx` – page composition and hero copy.
-- `tailwind.config.ts` / `postcss.config.js` – styling pipeline configuration.
-- `vite.config.ts` – Vite bundler configuration.
-
-## Moving to a dedicated GitHub repository
-
-If you want this app (and its deploy workflow) to live in its own repo, follow the step-by-step export guide in
-`NEW_REPO_SETUP.md`. It covers using sparse checkout to keep history, pushing to a new remote (e.g.,
-`github.com/edwin-lobo/fitness-assistant`), and wiring the AWS OIDC secrets/variables in the new repository.
+- `src/components/` contains the page sections and UI blocks.
+- `src/App.tsx` composes the landing page.
+- `vite.config.ts` sets the deploy base path.
+- `eslint.config.js` contains the flat ESLint configuration.
