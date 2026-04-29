@@ -56,7 +56,7 @@ const defaultHousehold: HouseholdProfile = {
   members: [
     {
       id: 'member-1',
-      name: 'Me',
+      name: 'Member A',
       preference: 'High-protein, simple prep',
       avoid: 'Decision-heavy meals',
       convenienceNeed: 'medium',
@@ -64,7 +64,7 @@ const defaultHousehold: HouseholdProfile = {
     },
     {
       id: 'member-2',
-      name: 'Partner',
+      name: 'Member B',
       preference: 'Comfort meals, predictable leftovers',
       avoid: 'Too many new recipes at once',
       convenienceNeed: 'high',

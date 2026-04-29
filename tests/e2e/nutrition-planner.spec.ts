@@ -20,11 +20,11 @@ test.describe('nutrition planner', () => {
   test('allows member profile editing and meal changes', async ({ page }) => {
     const groceryChecklist = page.getByRole('heading', { name: 'Grocery checklist' }).locator('..');
 
-    await page.getByLabel('Member name').first().fill('Edwin');
+    await page.getByLabel('Member name').first().fill('Member One');
     await page.getByLabel('Preference').first().fill('Simple high-protein meals');
     await page.getByLabel('Convenience need').first().selectOption('high');
 
-    await expect(page.getByLabel('Member name').first()).toHaveValue('Edwin');
+    await expect(page.getByLabel('Member name').first()).toHaveValue('Member One');
     await expect(page.getByLabel('Preference').first()).toHaveValue('Simple high-protein meals');
     await expect(page.getByLabel('Convenience need').first()).toHaveValue('high');
 
@@ -47,11 +47,11 @@ test.describe('nutrition planner', () => {
     await expect(shareOutput).toContainText('Ground turkey');
   });
 
-  test('copies the share output for FamilyWall handoff', async ({ browserName, context, page }) => {
+  test('copies the share output for grocery app handoff', async ({ browserName, context, page }) => {
     test.skip(browserName !== 'chromium', 'clipboard permission is only configured for Chromium CI');
 
     await context.grantPermissions(['clipboard-read', 'clipboard-write']);
-    await page.getByRole('button', { name: 'Copy for FamilyWall' }).click();
+    await page.getByRole('button', { name: 'Copy grocery handoff' }).click();
 
     await expect(page.getByText('Copied plan and grocery list')).toBeVisible();
     await expect(page.evaluate(() => navigator.clipboard.readText())).resolves.toContain('Grocery checklist');

@@ -24,13 +24,13 @@ npm run test:e2e
 
 ## Nutrition MVP
 
-The nutrition feature is a household-first planner for two adults who want lower-friction weekly planning and fewer processed foods.
+The nutrition feature is a household-first planner for lower-friction weekly planning and fewer processed foods.
 
 - `docs/nutrition-mvp-spec.md` defines the MVP scope, out-of-scope items, and week-one success metrics.
 - `docs/nutrition-data-model.md` documents the household, member, meal template, weekly plan, and grocery checklist model.
 - `docs/backlog/nutrition-mvp-backlog.md` links the nutrition backlog issues and priority sequence.
 
-The current app supports editable household member profiles, low-choice weekly meal planning, grocery checklist generation, and copy/email/text output for manual FamilyWall handoff.
+The current app supports editable household member profiles, low-choice weekly meal planning, grocery checklist generation, and copy/email/text output for manual grocery-app handoff.
 
 ## Testing
 

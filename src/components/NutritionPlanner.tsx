@@ -54,7 +54,7 @@ const NutritionPlanner: React.FC = () => {
         <div className="pill w-fit">Nutrition planning</div>
         <h2 className="text-3xl font-bold text-slate-900 md:text-4xl">Plan a low-friction week of food</h2>
         <p className="text-lg text-slate-600">
-          Build one repeatable household meal plan, turn it into a grocery checklist, and share it for a FamilyWall handoff.
+          Build one repeatable household meal plan, turn it into a grocery checklist, and share it with your grocery app.
         </p>
       </div>
 
@@ -148,7 +148,7 @@ const NutritionPlanner: React.FC = () => {
                 onClick={copyShareText}
                 className="rounded-md bg-primary-600 px-4 py-2 text-sm font-semibold text-white hover:bg-primary-700"
               >
-                Copy for FamilyWall
+                Copy grocery handoff
               </button>
               <a
                 className="rounded-md border border-slate-200 px-4 py-2 text-sm font-semibold text-slate-700 hover:border-primary-200 hover:text-primary-700"
