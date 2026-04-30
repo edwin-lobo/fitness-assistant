@@ -1,6 +1,13 @@
 # Fitness Assistant
 
-Static React, TypeScript, and Vite app for the fitness assistant MVP.
+Fitness Assistant is a static React, TypeScript, and Vite app for planning workouts and household nutrition routines. The current MVP focuses on a low-friction nutrition planner that turns a repeatable weekly meal plan into a grocery checklist.
+
+## Current Status
+
+- Draft PR: https://github.com/edwin-lobo/fitness-assistant/pull/14
+- Implemented nutrition issues: `#1` through `#4`
+- Next backlog batch: `#5` through `#8`
+- Deployment target: GitHub Pages
 
 ## Local development
 
@@ -24,24 +31,41 @@ npm run test:e2e
 
 ## Nutrition MVP
 
-The nutrition feature is a household-first planner for lower-friction weekly planning and fewer processed foods.
+The nutrition feature is a household-first planner for lower-friction weekly planning and fewer processed foods. It is intentionally simple: users edit household member preferences, choose meals from repeatable templates, review a generated grocery checklist, and share the result through copy, email, or text.
 
-- `docs/nutrition-mvp-spec.md` defines the MVP scope, out-of-scope items, and week-one success metrics.
+Implemented in this PR:
+
+- Editable household member profiles.
+- Low-choice weekly meal planning.
+- Repeatable meal templates.
+- Grocery checklist generation with duplicate consolidation.
+- Copy, email, and text output for manual grocery-app handoff.
+- Playwright browser coverage for the main nutrition workflow.
+
+Related docs:
+
+- `docs/nutrition-mvp-spec.md` defines scope, out-of-scope items, and success metrics.
 - `docs/nutrition-data-model.md` documents the household, member, meal template, weekly plan, and grocery checklist model.
 - `docs/backlog/nutrition-mvp-backlog.md` links the nutrition backlog issues and priority sequence.
-
-The current app supports editable household member profiles, low-choice weekly meal planning, grocery checklist generation, and copy/email/text output for manual grocery-app handoff.
+- `docs/testing.md` explains local and CI test coverage.
 
 ## Testing
 
-The repo includes Playwright browser tests for the nutrition planner in `tests/e2e/`.
+Run the same checks used by CI:
 
 ```bash
+npm run lint
 npm run build
 npm run test:e2e
 ```
 
 The Playwright config starts `npm run preview` automatically against the built app. The CI workflow in `.github/workflows/ci.yml` runs lint, build, and the Playwright suite for pull requests and pushes to `main`.
+
+If Playwright browsers are missing locally, install Chromium once:
+
+```bash
+npx playwright install chromium
+```
 
 ## Deployment
 
@@ -55,7 +79,10 @@ For a custom domain, set the repository variable `PAGES_CNAME`. The workflow wri
 
 ## Project structure
 
-- `src/components/` contains the page sections and UI blocks.
-- `src/App.tsx` composes the landing page.
+- `src/components/` contains React UI sections and reusable page blocks.
+- `src/data/nutrition.ts` contains the nutrition domain model, seed data, grocery generation, and share-output helpers.
+- `tests/e2e/` contains Playwright browser tests.
+- `.github/workflows/ci.yml` runs PR verification.
+- `.github/workflows/deploy-pages.yml` publishes the static build to GitHub Pages.
 - `vite.config.ts` sets the deploy base path.
 - `eslint.config.js` contains the flat ESLint configuration.

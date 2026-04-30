@@ -1,5 +1,7 @@
 # Nutrition Data Model
 
+Implementation: `src/data/nutrition.ts`
+
 This model implements the first four nutrition backlog issues:
 
 - `#1` nutrition MVP scope
@@ -9,7 +11,7 @@ This model implements the first four nutrition backlog issues:
 
 ## HouseholdProfile
 
-`HouseholdProfile` is the planning unit. The MVP ships with one default household and two editable members.
+`HouseholdProfile` is the planning unit. The MVP ships with one default household and editable member records.
 
 Fields:
 
@@ -66,4 +68,18 @@ The app builds a grocery checklist from the weekly plan by:
 - sorting items alphabetically inside each category,
 - formatting the result for display and share output.
 
-The implementation lives in `src/data/nutrition.ts`.
+## Helper functions
+
+- `getMealTemplate(id)`: resolves a selected meal template, falling back to the first template if an ID is missing.
+- `getMealTemplatesForSlot(slot)`: returns only templates valid for a meal slot.
+- `buildGroceryChecklist(plan)`: derives grouped grocery sections from a weekly plan.
+- `getLowerProcessedMealPercent(plan)`: calculates the lower-processed meal percentage displayed in the UI.
+- `buildShareOutput(plan, groceryChecklist)`: formats the meal plan and grocery checklist for copy/email/text handoff.
+- `formatQuantity(value)`: renders integer and decimal grocery quantities consistently.
+
+## Current constraints
+
+- Data is currently static and client-side only.
+- Profile edits are local UI state and are not persisted.
+- Grocery quantities are simple aggregate totals, not serving-adjusted by household size yet.
+- Direct grocery-app integrations are intentionally out of scope for the MVP.

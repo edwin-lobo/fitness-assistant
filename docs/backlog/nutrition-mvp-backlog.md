@@ -8,6 +8,10 @@ Primary target:
 - Low-decision, planning-accessible defaults
 - Manual grocery-app handoff first
 
+## Current branch status
+
+PR `#14` implements the first four issues. When that PR merges, close `#1` through `#4` and start the second implementation pass.
+
 ## Priority order
 
 1. [#1](https://github.com/edwin-lobo/fitness-assistant/issues/1) `[P0]` Define nutrition MVP scope and one-week success metrics - implemented in `docs/nutrition-mvp-spec.md`
@@ -42,3 +46,12 @@ The remaining issues are intentionally post-MVP:
 - `#10` future multi-household graph design
 - `#11` grocery-app integration research
 - `#12` broader demographic onboarding
+
+## Next recommended work
+
+After PR `#14` merges:
+
+- Close `#1` through `#4`.
+- Keep `#5` through `#8` open as the next product slice.
+- Prioritize `#5` first if sharing/reviewing plans outside the app is the main usage gap.
+- Prioritize `#8` first if repeat weekly use feels more important than new sharing formats.
