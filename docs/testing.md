@@ -33,6 +33,9 @@ The Playwright suite in `tests/e2e/nutrition-planner.spec.ts` covers:
 - Changing a weekly meal selection.
 - Verifying the grocery checklist updates.
 - Verifying share output stays in sync with the plan.
+- Applying reusable week templates.
+- Applying low-friction repeat and lower-processed swap actions.
+- Switching between full-plan, grocery-only, and reusable-template share formats.
 - Verifying the copy handoff flow.
 
 ## CI

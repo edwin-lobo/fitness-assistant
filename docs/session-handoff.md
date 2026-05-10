@@ -2,12 +2,12 @@
 
 Current state:
 - Live frontend deployed at `https://edwin-lobo.github.io/fitness-assistant/`.
-- The MVP centers on the household nutrition planner and grocery checklist workflow.
+- The MVP centers on the household nutrition planner, reusable week templates, grocery checklist workflow, and manual share handoff.
 - Existing docs already cover the nutrition spec, data model, backlog, and testing.
 
 Current plan:
 - Keep the app frontend-first and tighten the overall product polish.
-- Finish the remaining nutrition MVP backlog items before adding broader feature scope.
+- Merge the `#5` through `#8` implementation pass, then move to post-MVP issues `#9` through `#12`.
 - Keep the GitHub Pages deploy path stable and rerun lint/build/E2E after UI changes.
 
 Suggested next session starting point:

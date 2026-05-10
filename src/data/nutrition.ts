@@ -33,6 +33,7 @@ type MealTemplate = {
   processedLevel: 'low' | 'medium';
   repeatFriendly: boolean;
   why: string;
+  swapTip: string;
   ingredients: Ingredient[];
 };
 
@@ -46,6 +47,14 @@ type DayPlan = {
 type GrocerySection = {
   category: GroceryCategory;
   items: Ingredient[];
+};
+
+type WeekTemplate = {
+  id: string;
+  name: string;
+  description: string;
+  bestFor: string;
+  plan: DayPlan[];
 };
 
 const groceryCategories: GroceryCategory[] = ['Produce', 'Protein', 'Dairy', 'Pantry', 'Frozen', 'Bakery'];
@@ -82,6 +91,7 @@ const mealTemplates: MealTemplate[] = [
     processedLevel: 'low',
     repeatFriendly: true,
     why: 'Assemble once, repeat for low-friction mornings.',
+    swapTip: 'Keep oats, yogurt, and frozen berries stocked so breakfast does not depend on packaged bars.',
     ingredients: [
       { item: 'Rolled oats', quantity: 2, unit: 'cups', category: 'Pantry' },
       { item: 'Greek yogurt', quantity: 4, unit: 'cups', category: 'Dairy' },
@@ -97,6 +107,7 @@ const mealTemplates: MealTemplate[] = [
     processedLevel: 'low',
     repeatFriendly: true,
     why: 'Reliable savory breakfast with few ingredients.',
+    swapTip: 'Use pre-washed greens if prep energy is low; the meal still stays minimally processed.',
     ingredients: [
       { item: 'Eggs', quantity: 12, unit: 'count', category: 'Dairy' },
       { item: 'Spinach', quantity: 1, unit: 'bag', category: 'Produce' },
@@ -112,6 +123,7 @@ const mealTemplates: MealTemplate[] = [
     processedLevel: 'low',
     repeatFriendly: true,
     why: 'Batch-friendly lunch with easy portioning.',
+    swapTip: 'Batch the grain and protein once, then use jarred hummus instead of ultra-processed sauces.',
     ingredients: [
       { item: 'Chicken breast', quantity: 2, unit: 'lb', category: 'Protein' },
       { item: 'Brown rice', quantity: 2, unit: 'cups', category: 'Pantry' },
@@ -128,6 +140,7 @@ const mealTemplates: MealTemplate[] = [
     processedLevel: 'low',
     repeatFriendly: true,
     why: 'Low-cost leftovers that improve after a day.',
+    swapTip: 'Choose low-sodium broth and dry lentils to keep the convenience without leaning on frozen meals.',
     ingredients: [
       { item: 'Dry lentils', quantity: 2, unit: 'cups', category: 'Pantry' },
       { item: 'Carrots', quantity: 1, unit: 'bag', category: 'Produce' },
@@ -144,6 +157,7 @@ const mealTemplates: MealTemplate[] = [
     processedLevel: 'low',
     repeatFriendly: true,
     why: 'One pan, familiar flavors, and leftovers for lunch.',
+    swapTip: 'Use corn tortillas, salsa, and roasted vegetables to replace a takeout-style kit.',
     ingredients: [
       { item: 'Chicken thighs', quantity: 2, unit: 'lb', category: 'Protein' },
       { item: 'Bell peppers', quantity: 5, unit: 'count', category: 'Produce' },
@@ -160,6 +174,7 @@ const mealTemplates: MealTemplate[] = [
     processedLevel: 'low',
     repeatFriendly: false,
     why: 'Simple plate method dinner with minimal prep.',
+    swapTip: 'Buy frozen green beans or pre-washed potatoes when time is tight; avoid breaded frozen entrees.',
     ingredients: [
       { item: 'Salmon fillets', quantity: 4, unit: 'count', category: 'Protein' },
       { item: 'Baby potatoes', quantity: 2, unit: 'lb', category: 'Produce' },
@@ -175,6 +190,7 @@ const mealTemplates: MealTemplate[] = [
     processedLevel: 'medium',
     repeatFriendly: true,
     why: 'Uses canned staples intentionally for a lower-effort dinner.',
+    swapTip: 'Rinse canned beans, choose plain crushed tomatoes, and add extra vegetables before buying boxed chili kits.',
     ingredients: [
       { item: 'Ground turkey', quantity: 2, unit: 'lb', category: 'Protein' },
       { item: 'Canned beans', quantity: 4, unit: 'cans', category: 'Pantry' },
@@ -193,6 +209,50 @@ const defaultWeeklyPlan: DayPlan[] = [
   { day: 'Fri', breakfast: 'eggs-toast', lunch: 'grain-bowls', dinner: 'turkey-chili' },
   { day: 'Sat', breakfast: 'oats', lunch: 'lentil-soup', dinner: 'salmon-potatoes' },
   { day: 'Sun', breakfast: 'eggs-toast', lunch: 'grain-bowls', dinner: 'sheet-pan' },
+];
+
+const batchCookWeeklyPlan: DayPlan[] = [
+  { day: 'Mon', breakfast: 'oats', lunch: 'grain-bowls', dinner: 'sheet-pan' },
+  { day: 'Tue', breakfast: 'oats', lunch: 'grain-bowls', dinner: 'sheet-pan' },
+  { day: 'Wed', breakfast: 'oats', lunch: 'lentil-soup', dinner: 'turkey-chili' },
+  { day: 'Thu', breakfast: 'eggs-toast', lunch: 'lentil-soup', dinner: 'turkey-chili' },
+  { day: 'Fri', breakfast: 'eggs-toast', lunch: 'grain-bowls', dinner: 'sheet-pan' },
+  { day: 'Sat', breakfast: 'oats', lunch: 'lentil-soup', dinner: 'salmon-potatoes' },
+  { day: 'Sun', breakfast: 'eggs-toast', lunch: 'lentil-soup', dinner: 'salmon-potatoes' },
+];
+
+const lowDecisionWeeklyPlan: DayPlan[] = [
+  { day: 'Mon', breakfast: 'oats', lunch: 'grain-bowls', dinner: 'sheet-pan' },
+  { day: 'Tue', breakfast: 'oats', lunch: 'grain-bowls', dinner: 'sheet-pan' },
+  { day: 'Wed', breakfast: 'oats', lunch: 'grain-bowls', dinner: 'turkey-chili' },
+  { day: 'Thu', breakfast: 'oats', lunch: 'grain-bowls', dinner: 'turkey-chili' },
+  { day: 'Fri', breakfast: 'oats', lunch: 'lentil-soup', dinner: 'sheet-pan' },
+  { day: 'Sat', breakfast: 'eggs-toast', lunch: 'lentil-soup', dinner: 'salmon-potatoes' },
+  { day: 'Sun', breakfast: 'eggs-toast', lunch: 'lentil-soup', dinner: 'sheet-pan' },
+];
+
+const weekTemplates: WeekTemplate[] = [
+  {
+    id: 'balanced-repeat',
+    name: 'Balanced repeat week',
+    description: 'The default plan: familiar meals, a few repeats, and one medium-processed safety valve.',
+    bestFor: 'Starting from scratch',
+    plan: defaultWeeklyPlan,
+  },
+  {
+    id: 'batch-cook',
+    name: 'Batch-cook week',
+    description: 'Repeats lunches and dinners in pairs so prep can happen once and carry multiple days.',
+    bestFor: 'Lower weekday effort',
+    plan: batchCookWeeklyPlan,
+  },
+  {
+    id: 'low-decision',
+    name: 'Low-decision week',
+    description: 'Repeats breakfast and lunch heavily, leaving fewer choices for busy evenings.',
+    bestFor: 'Hard planning weeks',
+    plan: lowDecisionWeeklyPlan,
+  },
 ];
 
 const getMealTemplate = (id: string) => mealTemplates.find((meal) => meal.id === id) ?? mealTemplates[0];
@@ -235,8 +295,8 @@ const getLowerProcessedMealPercent = (plan: DayPlan[]) => {
 
 const formatQuantity = (value: number) => (Number.isInteger(value) ? String(value) : value.toFixed(1));
 
-const buildShareOutput = (plan: DayPlan[], groceryChecklist: GrocerySection[]) => {
-  const meals = plan
+const buildMealPlanOutput = (plan: DayPlan[]) =>
+  plan
     .map((day) => {
       const breakfast = getMealTemplate(day.breakfast).name;
       const lunch = getMealTemplate(day.lunch).name;
@@ -246,7 +306,8 @@ const buildShareOutput = (plan: DayPlan[], groceryChecklist: GrocerySection[]) =
     })
     .join('\n');
 
-  const groceries = groceryChecklist
+const buildGroceryOutput = (groceryChecklist: GrocerySection[]) =>
+  groceryChecklist
     .map(({ category, items }) => {
       if (items.length === 0) {
         return '';
@@ -258,19 +319,95 @@ const buildShareOutput = (plan: DayPlan[], groceryChecklist: GrocerySection[]) =
     .filter(Boolean)
     .join('\n\n');
 
+const getProcessedSwapTips = (plan: DayPlan[]) =>
+  Array.from(
+    new Map(
+      getPlannedMeals(plan)
+        .filter((meal) => meal.processedLevel === 'medium')
+        .map((meal) => [meal.id, { mealName: meal.name, tip: meal.swapTip }]),
+    ).values(),
+  );
+
+const getPlanningSummary = (plan: DayPlan[]) => {
+  const plannedMeals = getPlannedMeals(plan);
+  const uniqueMeals = new Set(plannedMeals.map((meal) => meal.id)).size;
+  const repeatFriendlyMeals = plannedMeals.filter((meal) => meal.repeatFriendly).length;
+  const tenMinuteMeals = plannedMeals.filter((meal) => meal.effort === '10 min').length;
+
+  return {
+    uniqueMeals,
+    repeatFriendlyMeals,
+    tenMinuteMeals,
+  };
+};
+
+const buildShareOutput = (plan: DayPlan[], groceryChecklist: GrocerySection[]) => {
+  const meals = buildMealPlanOutput(plan);
+  const groceries = buildGroceryOutput(groceryChecklist);
+
   return `Fitness Assistant weekly nutrition plan\n\nMeal plan\n${meals}\n\nGrocery checklist\n${groceries}`;
 };
 
+const cloneWeekPlan = (plan: DayPlan[]) => plan.map((day) => ({ ...day }));
+
+const getWeekTemplate = (id: string) => weekTemplates.find((template) => template.id === id) ?? weekTemplates[0];
+
+const buildTemplatePlan = (id: string) => cloneWeekPlan(getWeekTemplate(id).plan);
+
+const buildRepeatMealPlan = (mealId: string, slot: MealSlot, currentPlan: DayPlan[]) =>
+  currentPlan.map((day) => ({ ...day, [slot]: mealId }));
+
+const buildLowerProcessedPlan = (currentPlan: DayPlan[]) =>
+  currentPlan.map((day) => ({
+    ...day,
+    dinner: getMealTemplate(day.dinner).processedLevel === 'medium' ? 'sheet-pan' : day.dinner,
+  }));
+
+const getWeekTemplateMatch = (plan: DayPlan[]) => {
+  const signature = JSON.stringify(plan);
+  return weekTemplates.find((template) => JSON.stringify(template.plan) === signature);
+};
+
+const buildGroceryAppOutput = (groceryChecklist: GrocerySection[]) =>
+  groceryChecklist
+    .flatMap(({ items }) => items.map((item) => `${item.item} - ${formatQuantity(item.quantity)} ${item.unit}`))
+    .join('\n');
+
+const buildMealTemplateOutput = (plan: DayPlan[]) => {
+  const meals = plan
+    .map((day) => {
+      const breakfast = getMealTemplate(day.breakfast).name;
+      const lunch = getMealTemplate(day.lunch).name;
+      const dinner = getMealTemplate(day.dinner).name;
+
+      return `${day.day}: Breakfast - ${breakfast}; Lunch - ${lunch}; Dinner - ${dinner}`;
+    })
+    .join('\n');
+
+  return `Reusable meal template\n${meals}`;
+};
+
 export {
+  buildGroceryAppOutput,
   buildGroceryChecklist,
+  buildGroceryOutput,
+  buildLowerProcessedPlan,
+  buildMealPlanOutput,
+  buildMealTemplateOutput,
+  buildRepeatMealPlan,
   buildShareOutput,
+  buildTemplatePlan,
   defaultHousehold,
   defaultWeeklyPlan,
   formatQuantity,
   getLowerProcessedMealPercent,
   getMealTemplate,
   getMealTemplatesForSlot,
+  getPlanningSummary,
+  getProcessedSwapTips,
+  getWeekTemplateMatch,
   mealTemplates,
+  weekTemplates,
 };
 
 export type {
@@ -283,4 +420,5 @@ export type {
   MealTemplate,
   MemberProfile,
   PreferenceLevel,
+  WeekTemplate,
 };

@@ -1,30 +1,58 @@
 import React, { useMemo, useState } from 'react';
 import {
+  buildGroceryAppOutput,
   buildGroceryChecklist,
+  buildGroceryOutput,
+  buildLowerProcessedPlan,
+  buildMealTemplateOutput,
+  buildRepeatMealPlan,
   buildShareOutput,
+  buildTemplatePlan,
   defaultHousehold,
   defaultWeeklyPlan,
   formatQuantity,
   getLowerProcessedMealPercent,
   getMealTemplatesForSlot,
+  getPlanningSummary,
+  getProcessedSwapTips,
+  getWeekTemplateMatch,
   mealTemplates,
   type DayPlan,
   type MealSlot,
   type MemberProfile,
   type PreferenceLevel,
+  weekTemplates,
 } from '../data/nutrition';
 
 const preferenceLevels: PreferenceLevel[] = ['low', 'medium', 'high'];
 const mealSlots: MealSlot[] = ['breakfast', 'lunch', 'dinner'];
+const shareModes = ['Full plan', 'Groceries only', 'Meal template'] as const;
+
+type ShareMode = (typeof shareModes)[number];
 
 const NutritionPlanner: React.FC = () => {
   const [members, setMembers] = useState<MemberProfile[]>(defaultHousehold.members);
   const [plan, setPlan] = useState<DayPlan[]>(defaultWeeklyPlan);
   const [shareStatus, setShareStatus] = useState('Ready to share');
+  const [shareMode, setShareMode] = useState<ShareMode>('Full plan');
 
   const groceryChecklist = useMemo(() => buildGroceryChecklist(plan), [plan]);
-  const shareText = useMemo(() => buildShareOutput(plan, groceryChecklist), [groceryChecklist, plan]);
+  const shareText = useMemo(() => {
+    if (shareMode === 'Groceries only') {
+      return buildGroceryAppOutput(groceryChecklist);
+    }
+
+    if (shareMode === 'Meal template') {
+      return buildMealTemplateOutput(plan);
+    }
+
+    return buildShareOutput(plan, groceryChecklist);
+  }, [groceryChecklist, plan, shareMode]);
+  const groceryText = useMemo(() => buildGroceryOutput(groceryChecklist), [groceryChecklist]);
   const lowerProcessedPercent = useMemo(() => getLowerProcessedMealPercent(plan), [plan]);
+  const swapTips = useMemo(() => getProcessedSwapTips(plan), [plan]);
+  const planningSummary = useMemo(() => getPlanningSummary(plan), [plan]);
+  const matchedTemplate = useMemo(() => getWeekTemplateMatch(plan), [plan]);
 
   const updateMember = <K extends keyof MemberProfile>(id: string, field: K, value: MemberProfile[K]) => {
     setMembers((current) => current.map((member) => (member.id === id ? { ...member, [field]: value } : member)));
@@ -34,18 +62,33 @@ const NutritionPlanner: React.FC = () => {
     setPlan((current) => current.map((item) => (item.day === day ? { ...item, [slot]: mealId } : item)));
   };
 
-  const copyShareText = async () => {
+  const copyText = async (value: string, successMessage: string) => {
     try {
-      await navigator.clipboard.writeText(shareText);
-      setShareStatus('Copied plan and grocery list');
+      await navigator.clipboard.writeText(value);
+      setShareStatus(successMessage);
     } catch {
       setShareStatus('Copy blocked by browser; use the text box below');
     }
   };
 
   const repeatSimpleWeek = () => {
-    setPlan(defaultWeeklyPlan);
+    setPlan(buildTemplatePlan('balanced-repeat'));
     setShareStatus('Simple repeatable week restored');
+  };
+
+  const applyTemplate = (templateId: string) => {
+    setPlan(buildTemplatePlan(templateId));
+    setShareStatus('Reusable week template applied');
+  };
+
+  const repeatMealAcrossWeek = (slot: MealSlot, mealId: string) => {
+    setPlan((current) => buildRepeatMealPlan(mealId, slot, current));
+    setShareStatus(`${slot} repeated across the week`);
+  };
+
+  const lowerProcessedDinners = () => {
+    setPlan((current) => buildLowerProcessedPlan(current));
+    setShareStatus('Lower-processed dinner swaps applied');
   };
 
   return (
@@ -141,27 +184,52 @@ const NutritionPlanner: React.FC = () => {
 
           <article className="card p-6">
             <h3 className="text-lg font-semibold text-slate-900">Share output</h3>
-            <p className="mt-1 text-sm text-slate-600">{shareStatus}</p>
-            <div className="mt-4 flex flex-wrap gap-3">
-              <button
-                type="button"
-                onClick={copyShareText}
-                className="rounded-md bg-primary-600 px-4 py-2 text-sm font-semibold text-white hover:bg-primary-700"
-              >
-                Copy grocery handoff
-              </button>
-              <a
-                className="rounded-md border border-slate-200 px-4 py-2 text-sm font-semibold text-slate-700 hover:border-primary-200 hover:text-primary-700"
-                href={`mailto:?subject=${encodeURIComponent('Weekly meal plan')}&body=${encodeURIComponent(shareText)}`}
-              >
-                Email
-              </a>
-              <a
-                className="rounded-md border border-slate-200 px-4 py-2 text-sm font-semibold text-slate-700 hover:border-primary-200 hover:text-primary-700"
-                href={`sms:?&body=${encodeURIComponent(shareText)}`}
-              >
-                Text
-              </a>
+            <p className="mt-1 text-sm text-slate-600">
+              {shareStatus}. Choose the smallest useful output before sending it elsewhere.
+            </p>
+            <div className="mt-4 grid gap-3">
+              <label className="text-sm font-semibold text-slate-700">
+                Output format
+                <select
+                  className="mt-1 w-full rounded-md border border-slate-200 px-3 py-2"
+                  value={shareMode}
+                  onChange={(event) => setShareMode(event.target.value as ShareMode)}
+                >
+                  {shareModes.map((mode) => (
+                    <option key={mode} value={mode}>
+                      {mode}
+                    </option>
+                  ))}
+                </select>
+              </label>
+              <div className="flex flex-wrap gap-3">
+                <button
+                  type="button"
+                  onClick={() => copyText(shareText, `Copied ${shareMode.toLowerCase()}`)}
+                  className="rounded-md bg-primary-600 px-4 py-2 text-sm font-semibold text-white hover:bg-primary-700"
+                >
+                  Copy selected output
+                </button>
+                <button
+                  type="button"
+                  onClick={() => copyText(groceryText, 'Copied categorized grocery list')}
+                  className="rounded-md border border-slate-200 px-4 py-2 text-sm font-semibold text-slate-700 hover:border-primary-200 hover:text-primary-700"
+                >
+                  Copy categorized groceries
+                </button>
+                <a
+                  className="rounded-md border border-slate-200 px-4 py-2 text-sm font-semibold text-slate-700 hover:border-primary-200 hover:text-primary-700"
+                  href={`mailto:?subject=${encodeURIComponent('Weekly meal plan')}&body=${encodeURIComponent(shareText)}`}
+                >
+                  Email
+                </a>
+                <a
+                  className="rounded-md border border-slate-200 px-4 py-2 text-sm font-semibold text-slate-700 hover:border-primary-200 hover:text-primary-700"
+                  href={`sms:?&body=${encodeURIComponent(shareText)}`}
+                >
+                  Text
+                </a>
+              </div>
             </div>
             <textarea
               className="mt-4 h-48 w-full rounded-md border border-slate-200 bg-slate-50 p-3 text-xs leading-relaxed text-slate-700"
@@ -176,7 +244,10 @@ const NutritionPlanner: React.FC = () => {
             <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
               <div>
                 <h3 className="text-lg font-semibold text-slate-900">Weekly meal plan</h3>
-                <p className="mt-1 text-sm text-slate-600">Defaults repeat meals to lower planning effort.</p>
+                <p className="mt-1 text-sm text-slate-600">
+                  Defaults repeat meals to lower planning effort.
+                  {matchedTemplate ? ` Current template: ${matchedTemplate.name}.` : ' Custom week.'}
+                </p>
               </div>
               <button
                 type="button"
@@ -185,6 +256,36 @@ const NutritionPlanner: React.FC = () => {
               >
                 Reset to simple week
               </button>
+            </div>
+
+            <div className="mt-5 grid gap-3 md:grid-cols-3">
+              {weekTemplates.map((template) => (
+                <button
+                  key={template.id}
+                  type="button"
+                  onClick={() => applyTemplate(template.id)}
+                  className="rounded-xl border border-slate-200 bg-slate-50 p-4 text-left hover:border-primary-200 hover:bg-primary-50"
+                >
+                  <span className="text-xs font-semibold uppercase tracking-wide text-primary-700">{template.bestFor}</span>
+                  <span className="mt-1 block text-sm font-semibold text-slate-900">{template.name}</span>
+                  <span className="mt-1 block text-xs leading-relaxed text-slate-600">{template.description}</span>
+                </button>
+              ))}
+            </div>
+
+            <div className="mt-5 grid gap-3 rounded-2xl border border-emerald-100 bg-emerald-50 p-4 text-sm text-emerald-950 md:grid-cols-3">
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-wide text-emerald-700">Decision load</p>
+                <p className="mt-1 font-semibold">{planningSummary.uniqueMeals} unique meals this week</p>
+              </div>
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-wide text-emerald-700">Repeat support</p>
+                <p className="mt-1 font-semibold">{planningSummary.repeatFriendlyMeals} repeat-friendly slots</p>
+              </div>
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-wide text-emerald-700">Fast starts</p>
+                <p className="mt-1 font-semibold">{planningSummary.tenMinuteMeals} ten-minute meals</p>
+              </div>
             </div>
 
             <div className="mt-5 overflow-x-auto">
@@ -223,6 +324,43 @@ const NutritionPlanner: React.FC = () => {
             </div>
           </article>
 
+          <article className="card p-6">
+            <div className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
+              <div>
+                <h3 className="text-lg font-semibold text-slate-900">Low-friction planning actions</h3>
+                <p className="mt-1 text-sm text-slate-600">
+                  Use one-click changes when planning bandwidth is low instead of editing every day.
+                </p>
+              </div>
+              <button
+                type="button"
+                onClick={lowerProcessedDinners}
+                className="rounded-md bg-emerald-600 px-4 py-2 text-sm font-semibold text-white hover:bg-emerald-700"
+              >
+                Apply lower-processed dinner swaps
+              </button>
+            </div>
+            <div className="mt-4 grid gap-3 sm:grid-cols-3">
+              {mealSlots.map((slot) => {
+                const firstMeal = getMealTemplatesForSlot(slot)[0];
+
+                return (
+                  <button
+                    key={slot}
+                    type="button"
+                    onClick={() => repeatMealAcrossWeek(slot, firstMeal.id)}
+                    className="rounded-xl border border-slate-200 p-4 text-left hover:border-primary-200 hover:text-primary-700"
+                  >
+                    <span className="block text-xs font-semibold uppercase tracking-wide text-slate-500">
+                      Repeat {slot}
+                    </span>
+                    <span className="mt-1 block text-sm font-semibold">{firstMeal.name}</span>
+                  </button>
+                );
+              })}
+            </div>
+          </article>
+
           <div className="grid gap-6 xl:grid-cols-[0.95fr_1.05fr]">
             <article className="card p-6">
               <h3 className="text-lg font-semibold text-slate-900">Meal templates</h3>
@@ -238,13 +376,26 @@ const NutritionPlanner: React.FC = () => {
                         {meal.effort}
                       </span>
                     </div>
+                    <p className="mt-2 text-xs leading-relaxed text-primary-700">{meal.swapTip}</p>
                   </div>
                 ))}
               </div>
             </article>
 
             <article className="card p-6">
-              <h3 className="text-lg font-semibold text-slate-900">Grocery checklist</h3>
+              <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+                <div>
+                  <h3 className="text-lg font-semibold text-slate-900">Grocery checklist</h3>
+                  <p className="mt-1 text-sm text-slate-600">Copy groceries into your list app, then check off manually.</p>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => copyText(buildGroceryAppOutput(groceryChecklist), 'Copied grocery-app handoff')}
+                  className="rounded-md border border-slate-200 px-3 py-2 text-xs font-semibold text-slate-700 hover:border-primary-200 hover:text-primary-700"
+                >
+                  Copy app handoff
+                </button>
+              </div>
               <div className="mt-4 space-y-5">
                 {groceryChecklist.map(({ category, items }) => (
                   <div key={category}>
@@ -264,6 +415,28 @@ const NutritionPlanner: React.FC = () => {
               </div>
             </article>
           </div>
+
+          <article className="card p-6">
+            <h3 className="text-lg font-semibold text-slate-900">Processed-food reduction guidance</h3>
+            <p className="mt-1 text-sm text-slate-600">
+              The goal is fewer default processed meals, not perfect avoidance. Keep convenience when it prevents skipped
+              meals.
+            </p>
+            <div className="mt-4 space-y-3">
+              {swapTips.length > 0 ? (
+                swapTips.map((swap) => (
+                  <div key={swap.mealName} className="rounded-lg border border-amber-100 bg-amber-50 p-4">
+                    <h4 className="text-sm font-semibold text-amber-950">{swap.mealName}</h4>
+                    <p className="mt-1 text-sm leading-relaxed text-amber-900">{swap.tip}</p>
+                  </div>
+                ))
+              ) : (
+                <div className="rounded-lg border border-emerald-100 bg-emerald-50 p-4 text-sm text-emerald-950">
+                  This plan is already using the lower-processed meal set.
+                </div>
+              )}
+            </div>
+          </article>
         </div>
       </div>
     </section>

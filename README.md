@@ -4,9 +4,8 @@ Fitness Assistant is a static React, TypeScript, and Vite app for planning worko
 
 ## Current Status
 
-- Draft PR: https://github.com/edwin-lobo/fitness-assistant/pull/14
-- Implemented nutrition issues: `#1` through `#4`
-- Next backlog batch: `#5` through `#8`
+- Nutrition MVP branch includes issues: `#1` through `#8`
+- Next backlog batch: `#9` through `#12`
 - Deployment target: GitHub Pages
 
 ## Local development
@@ -39,7 +38,11 @@ Implemented in this PR:
 - Low-choice weekly meal planning.
 - Repeatable meal templates.
 - Grocery checklist generation with duplicate consolidation.
+- Reusable week templates for balanced, batch-cook, and low-decision planning.
+- Low-friction one-click repeat and lower-processed swap actions.
 - Copy, email, and text output for manual grocery-app handoff.
+- Share formats for full plans, grocery-only handoff, and reusable meal templates.
+- Processed-food reduction guidance tied to planned meals.
 - Playwright browser coverage for the main nutrition workflow.
 
 Related docs:

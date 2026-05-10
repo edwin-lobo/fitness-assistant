@@ -1,6 +1,6 @@
 # Nutrition MVP Spec
 
-Status: implemented by PR #14 for issues `#1` through `#4`.
+Status: implemented for issues `#1` through `#8`.
 
 ## Goal
 
@@ -17,6 +17,8 @@ Help a shared household decide what to eat this week, generate a grocery checkli
 - Household-first planning with editable member profiles.
 - Low-choice weekly meal planning.
 - Repeatable meal templates.
+- Reusable week templates for different planning-energy levels.
+- Low-friction repeat and swap actions for hard planning weeks.
 - Grocery checklist generated from the selected weekly plan.
 - Manual grocery-app handoff through copy, email, or text output.
 - Practical less-processed-food guidance through template choices and swap-friendly language.
@@ -42,15 +44,22 @@ Help a shared household decide what to eat this week, generate a grocery checkli
 - The app ships with a default shared household and two editable member profiles.
 - A seven-day plan is prefilled from repeatable meal templates.
 - Users can change breakfast, lunch, and dinner selections by day.
+- Users can apply reusable week templates instead of starting from a blank plan.
+- Users can repeat a meal across the week with one action.
+- Users can apply lower-processed dinner swaps when the plan includes medium-processed meals.
 - The grocery checklist updates from the selected meals.
 - The share output updates with the meal plan and checklist.
+- Users can choose between full-plan, grocery-only, and reusable-template share formats.
 - Users can copy the share output or open email/text handoff links.
+- Users can review practical swap tips for planned medium-processed meals.
 
 ## Review checklist
 
 - The nutrition section renders on desktop and mobile.
 - Editing member profile fields does not break the generated plan.
 - Changing a meal updates the grocery checklist and share output.
+- Applying a week template changes the plan and preserves grocery generation.
+- Applying lower-processed swaps updates the low-processed percentage and guidance.
 - The copy handoff action reports success or a browser-blocked fallback message.
 - The docs use generic shared-household language and avoid personal household details.
 

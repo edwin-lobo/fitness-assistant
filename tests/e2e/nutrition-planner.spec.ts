@@ -7,19 +7,18 @@ test.describe('nutrition planner', () => {
   });
 
   test('renders the household meal planner and grocery checklist', async ({ page }) => {
-    const groceryChecklist = page.getByRole('heading', { name: 'Grocery checklist' }).locator('..');
-
     await expect(page.getByRole('heading', { name: 'Household profile' })).toBeVisible();
     await expect(page.getByRole('heading', { name: 'Weekly meal plan' })).toBeVisible();
+    await expect(page.getByRole('button', { name: /Low-decision week/ })).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'Low-friction planning actions' })).toBeVisible();
     await expect(page.getByRole('heading', { name: 'Grocery checklist' })).toBeVisible();
-    await expect(groceryChecklist.getByText('Chicken breast', { exact: true })).toBeVisible();
-    await expect(groceryChecklist.getByText('Bell peppers', { exact: true })).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'Processed-food reduction guidance' })).toBeVisible();
+    await expect(page.getByText('Chicken breast', { exact: true })).toBeVisible();
+    await expect(page.getByText('Bell peppers', { exact: true })).toBeVisible();
     await expect(page.getByText('90% low processed')).toBeVisible();
   });
 
   test('allows member profile editing and meal changes', async ({ page }) => {
-    const groceryChecklist = page.getByRole('heading', { name: 'Grocery checklist' }).locator('..');
-
     await page.getByLabel('Member name').first().fill('Member One');
     await page.getByLabel('Preference').first().fill('Simple high-protein meals');
     await page.getByLabel('Convenience need').first().selectOption('high');
@@ -30,8 +29,8 @@ test.describe('nutrition planner', () => {
 
     await page.getByRole('row', { name: /Wed/ }).getByRole('combobox').nth(2).selectOption('turkey-chili');
 
-    await expect(groceryChecklist.getByText('Ground turkey', { exact: true })).toBeVisible();
-    await expect(groceryChecklist.getByText('Canned beans', { exact: true })).toBeVisible();
+    await expect(page.getByText('Ground turkey', { exact: true })).toBeVisible();
+    await expect(page.getByText('Canned beans', { exact: true })).toBeVisible();
   });
 
   test('keeps share output in sync with the selected plan', async ({ page }) => {
@@ -47,13 +46,43 @@ test.describe('nutrition planner', () => {
     await expect(shareOutput).toContainText('Ground turkey');
   });
 
+  test('applies reusable week templates and low-friction actions', async ({ page }) => {
+    await page.getByRole('button', { name: /Low-decision week/ }).click();
+
+    await expect(page.getByText('Current template: Low-decision week.')).toBeVisible();
+    await expect(page.getByText(/unique meals this week/)).toBeVisible();
+
+    await page.getByRole('button', { name: /Apply lower-processed dinner swaps/ }).click();
+
+    await expect(page.getByText('100% low processed')).toBeVisible();
+    await expect(page.getByText('This plan is already using the lower-processed meal set.')).toBeVisible();
+
+    await page.getByRole('button', { name: /Repeat lunch/ }).click();
+
+    await expect(page.getByText('lunch repeated across the week')).toBeVisible();
+  });
+
+  test('supports grocery-only and reusable template share formats', async ({ page }) => {
+    const shareOutput = page.getByRole('textbox').last();
+
+    await page.getByLabel('Output format').selectOption('Groceries only');
+
+    await expect(shareOutput).toContainText('Chicken breast -');
+    await expect(shareOutput).not.toContainText('Meal plan');
+
+    await page.getByLabel('Output format').selectOption('Meal template');
+
+    await expect(shareOutput).toContainText('Reusable meal template');
+    await expect(shareOutput).toContainText('Mon: Breakfast - Protein overnight oats');
+  });
+
   test('copies the share output for grocery app handoff', async ({ browserName, context, page }) => {
     test.skip(browserName !== 'chromium', 'clipboard permission is only configured for Chromium CI');
 
     await context.grantPermissions(['clipboard-read', 'clipboard-write']);
-    await page.getByRole('button', { name: 'Copy grocery handoff' }).click();
+    await page.getByRole('button', { name: 'Copy selected output' }).click();
 
-    await expect(page.getByText('Copied plan and grocery list')).toBeVisible();
+    await expect(page.getByText('Copied full plan')).toBeVisible();
     await expect(page.evaluate(() => navigator.clipboard.readText())).resolves.toContain('Grocery checklist');
   });
 });
