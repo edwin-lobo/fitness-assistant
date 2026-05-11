@@ -10,7 +10,7 @@ Primary target:
 
 ## Current branch status
 
-PR `#14` implements the first four issues. When that PR merges, close `#1` through `#4` and start the second implementation pass.
+Issues `#1` through `#4` are closed. PR `#17` implements the second MVP pass for `#5` through `#8`; those issues should close when PR `#17` merges.
 
 ## Priority order
 
@@ -18,10 +18,10 @@ PR `#14` implements the first four issues. When that PR merges, close `#1` throu
 2. [#2](https://github.com/edwin-lobo/fitness-assistant/issues/2) `[P0]` Design household and member profile model for nutrition planning - implemented in `docs/nutrition-data-model.md` and `src/data/nutrition.ts`
 3. [#3](https://github.com/edwin-lobo/fitness-assistant/issues/3) `[P0]` Build a low-choice weekly meal planning system - implemented in `src/components/NutritionPlanner.tsx`
 4. [#4](https://github.com/edwin-lobo/fitness-assistant/issues/4) `[P0]` Generate a grocery checklist from the weekly meal plan - implemented in `src/data/nutrition.ts`
-5. [#5](https://github.com/edwin-lobo/fitness-assistant/issues/5) `[P1]` Add share outputs for meal plan and grocery list
-6. [#6](https://github.com/edwin-lobo/fitness-assistant/issues/6) `[P1]` Make the nutrition planning flow low-friction and planning-accessible
-7. [#7](https://github.com/edwin-lobo/fitness-assistant/issues/7) `[P1]` Add processed-food reduction guidance and practical swap logic
-8. [#8](https://github.com/edwin-lobo/fitness-assistant/issues/8) `[P1]` Support weekly habit formation with reusable meal templates
+5. [#5](https://github.com/edwin-lobo/fitness-assistant/issues/5) `[P1]` Add share outputs for meal plan and grocery list - implemented in `src/components/NutritionPlanner.tsx` and `src/data/nutrition.ts`
+6. [#6](https://github.com/edwin-lobo/fitness-assistant/issues/6) `[P1]` Make the nutrition planning flow low-friction and planning-accessible - implemented with one-click repeat and swap actions
+7. [#7](https://github.com/edwin-lobo/fitness-assistant/issues/7) `[P1]` Add processed-food reduction guidance and practical swap logic - implemented with meal swap tips and lower-processed dinner swaps
+8. [#8](https://github.com/edwin-lobo/fitness-assistant/issues/8) `[P1]` Support weekly habit formation with reusable meal templates - implemented with reusable week templates
 9. [#9](https://github.com/edwin-lobo/fitness-assistant/issues/9) `[P2]` Add richer weekly planner interactions after the repeatable flow works
 10. [#10](https://github.com/edwin-lobo/fitness-assistant/issues/10) `[P2]` Design future multi-household and member graph model
 11. [#11](https://github.com/edwin-lobo/fitness-assistant/issues/11) `[P3]` Research grocery-app integration feasibility
@@ -29,17 +29,19 @@ PR `#14` implements the first four issues. When that PR merges, close `#1` throu
 
 ## MVP delivery sequence
 
-The first implementation pass should complete:
+The first implementation pass is complete:
 - `#1` MVP definition
 - `#2` household/member profile model
 - `#3` weekly meal planning system
 - `#4` grocery checklist generation
 
-The second pass should complete:
+The second implementation pass completes:
 - `#5` share outputs
 - `#6` low-friction planning
 - `#7` processed-food reduction guidance
 - `#8` reusable meal templates
+
+Status: implemented in PR `#17`, pending merge.
 
 The remaining issues are intentionally post-MVP:
 - `#9` richer planner interactions
@@ -49,9 +51,9 @@ The remaining issues are intentionally post-MVP:
 
 ## Next recommended work
 
-After PR `#14` merges:
+After the second MVP pass merges:
 
-- Close `#1` through `#4`.
-- Keep `#5` through `#8` open as the next product slice.
-- Prioritize `#5` first if sharing/reviewing plans outside the app is the main usage gap.
-- Prioritize `#8` first if repeat weekly use feels more important than new sharing formats.
+- Close `#5` through `#8`.
+- Keep `#9` through `#12` open as the post-MVP backlog.
+- Prioritize `#9` first if the planner needs richer interactive editing.
+- Prioritize `#11` first if grocery-app handoff becomes the largest workflow gap.

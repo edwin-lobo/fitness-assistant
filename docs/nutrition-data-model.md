@@ -2,12 +2,16 @@
 
 Implementation: `src/data/nutrition.ts`
 
-This model implements the first four nutrition backlog issues:
+This model implements the first eight nutrition backlog issues:
 
 - `#1` nutrition MVP scope
 - `#2` household and member profile model
 - `#3` low-choice weekly meal planning
 - `#4` grocery checklist generation
+- `#5` share outputs for meal plans and groceries
+- `#6` low-friction planning actions
+- `#7` processed-food reduction guidance
+- `#8` reusable meal templates
 
 ## HouseholdProfile
 
@@ -45,7 +49,20 @@ Fields:
 - `processedLevel`: `low` or `medium`.
 - `repeatFriendly`: whether the meal is suitable for repeated use in the same week.
 - `why`: short planning rationale.
+- `swapTip`: practical guidance for keeping the meal less processed or improving a medium-processed fallback.
 - `ingredients`: grocery inputs for checklist generation.
+
+## WeekTemplate
+
+`WeekTemplate` is a reusable seven-day plan preset for different planning-energy levels.
+
+Fields:
+
+- `id`: stable template identifier.
+- `name`: display name.
+- `description`: short explanation of the pattern.
+- `bestFor`: concise use case label.
+- `plan`: a complete `DayPlan[]` preset.
 
 ## DayPlan
 
@@ -73,7 +90,16 @@ The app builds a grocery checklist from the weekly plan by:
 - `getMealTemplate(id)`: resolves a selected meal template, falling back to the first template if an ID is missing.
 - `getMealTemplatesForSlot(slot)`: returns only templates valid for a meal slot.
 - `buildGroceryChecklist(plan)`: derives grouped grocery sections from a weekly plan.
+- `buildGroceryAppOutput(groceryChecklist)`: formats a plain line-by-line list for external grocery apps.
+- `buildGroceryOutput(groceryChecklist)`: formats a categorized grocery list.
+- `buildMealTemplateOutput(plan)`: formats the current week as a reusable template.
+- `buildRepeatMealPlan(mealId, slot, currentPlan)`: repeats one selected meal across a slot for the week.
+- `buildLowerProcessedPlan(currentPlan)`: swaps medium-processed dinners to lower-processed defaults.
+- `buildTemplatePlan(id)`: creates a cloned plan from a reusable week template.
 - `getLowerProcessedMealPercent(plan)`: calculates the lower-processed meal percentage displayed in the UI.
+- `getPlanningSummary(plan)`: returns quick counts for decision load, repeat-friendly meals, and fast starts.
+- `getProcessedSwapTips(plan)`: returns swap guidance for planned medium-processed meals.
+- `getWeekTemplateMatch(plan)`: identifies whether the current plan matches a reusable preset.
 - `buildShareOutput(plan, groceryChecklist)`: formats the meal plan and grocery checklist for copy/email/text handoff.
 - `formatQuantity(value)`: renders integer and decimal grocery quantities consistently.
 
