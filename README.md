@@ -4,8 +4,10 @@ Fitness Assistant is a static React, TypeScript, and Vite app for planning worko
 
 ## Current Status
 
-- Nutrition MVP branch includes issues: `#1` through `#8`
-- Next backlog batch: `#9` through `#12`
+- Live site: https://edwin-lobo.github.io/fitness-assistant/
+- Merged MVP foundation: issues `#1` through `#4`
+- Open review: PR `#17` implements issues `#5` through `#8`
+- Next backlog batch after PR `#17`: issues `#9` through `#12`
 - Deployment target: GitHub Pages
 
 ## Local development
@@ -32,7 +34,7 @@ npm run test:e2e
 
 The nutrition feature is a household-first planner for lower-friction weekly planning and fewer processed foods. It is intentionally simple: users edit household member preferences, choose meals from repeatable templates, review a generated grocery checklist, and share the result through copy, email, or text.
 
-Implemented in this PR:
+Implemented across the nutrition MVP branch:
 
 - Editable household member profiles.
 - Low-choice weekly meal planning.
@@ -48,6 +50,7 @@ Implemented in this PR:
 Related docs:
 
 - `docs/nutrition-mvp-spec.md` defines scope, out-of-scope items, and success metrics.
+- `docs/nutrition-workflow.md` explains the current user workflow and manual grocery-app handoff.
 - `docs/nutrition-data-model.md` documents the household, member, meal template, weekly plan, and grocery checklist model.
 - `docs/backlog/nutrition-mvp-backlog.md` links the nutrition backlog issues and priority sequence.
 - `docs/testing.md` explains local and CI test coverage.

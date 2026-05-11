@@ -1,6 +1,6 @@
 # Nutrition MVP Spec
 
-Status: implemented for issues `#1` through `#8`.
+Status: issues `#1` through `#4` are merged; issues `#5` through `#8` are implemented in PR `#17` pending merge.
 
 ## Goal
 
@@ -71,3 +71,5 @@ Help a shared household decide what to eat this week, generate a grocery checkli
 - `WeeklyMealPlan`: selected templates across days and meal slots.
 - `GroceryChecklist`: consolidated shopping output derived from the weekly plan.
 - `ShareOutput`: text formats suitable for copy, email, text, and future web sharing.
+
+See `docs/nutrition-workflow.md` for the user-facing workflow and handoff behavior.

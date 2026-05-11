@@ -10,7 +10,7 @@ Primary target:
 
 ## Current branch status
 
-Issues `#1` through `#4` are closed. The current branch implements the second MVP pass for `#5` through `#8`.
+Issues `#1` through `#4` are closed. PR `#17` implements the second MVP pass for `#5` through `#8`; those issues should close when PR `#17` merges.
 
 ## Priority order
 
@@ -29,7 +29,7 @@ Issues `#1` through `#4` are closed. The current branch implements the second MV
 
 ## MVP delivery sequence
 
-The first implementation pass should complete:
+The first implementation pass is complete:
 - `#1` MVP definition
 - `#2` household/member profile model
 - `#3` weekly meal planning system
@@ -40,6 +40,8 @@ The second implementation pass completes:
 - `#6` low-friction planning
 - `#7` processed-food reduction guidance
 - `#8` reusable meal templates
+
+Status: implemented in PR `#17`, pending merge.
 
 The remaining issues are intentionally post-MVP:
 - `#9` richer planner interactions
