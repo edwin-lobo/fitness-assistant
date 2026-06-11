@@ -6,6 +6,57 @@ on:
     branches: ["main"]
 
 jobs:
+  portable-postgres:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Portable DB runner tests
+        run: npm run test:portable-db
+
+      - name: Portable Postgres database tests
+        run: npm run db:test
+
+  supabase:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Supabase CLI
+        uses: supabase/setup-cli@v1
+        with:
+          version: latest
+
+      - name: Start local Supabase database
+        run: supabase db start
+
+      - name: Verify generated database types
+        run: |
+          supabase gen types typescript --local --schema public > src/lib/database.types.ts
+          if ! git diff --ignore-space-at-eol --exit-code --quiet src/lib/database.types.ts; then
+            echo "Generated Supabase types are out of date. Run:"
+            echo "  supabase db start"
+            echo "  supabase gen types typescript --local --schema public > src/lib/database.types.ts"
+            git diff -- src/lib/database.types.ts
+            exit 1
+          fi
+
+      - name: Database tests
+        run: supabase test db
+
   verify:
     runs-on: ubuntu-latest
 
@@ -30,6 +81,9 @@ jobs:
 
       - name: Build
         run: npm run build
+
+      - name: Unit tests
+        run: npm run test:unit
 
       - name: Playwright e2e
         run: npm run test:e2e

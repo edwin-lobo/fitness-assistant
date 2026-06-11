@@ -1,4 +1,5 @@
 import React from 'react';
+import AuthSection from './components/AuthSection';
 import CTASection from './components/CTASection';
 import FeatureGrid, { type Feature } from './components/FeatureGrid';
 import Footer from './components/Footer';
@@ -93,6 +94,7 @@ const App: React.FC = () => {
         />
         <NutritionPlanner />
         <GoalTracker goals={goals} />
+        <AuthSection />
         <CTASection onPrimaryClick={handleCta} />
       </main>
       <Footer />

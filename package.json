@@ -7,11 +7,21 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
+    "test": "npm run test:unit && npm run test:e2e",
+    "test:unit": "node --test scripts/*.test.mjs tests/unit/*.test.mjs",
+    "test:activity-check": "node --test scripts/supabase-activity-check.test.mjs",
+    "test:portable-db": "node --test scripts/portable-db.test.mjs",
+    "supabase:activity-check": "node scripts/supabase-activity-check.mjs",
+    "db:local:start": "node scripts/portable-db.mjs start",
+    "db:local:reset": "node scripts/portable-db.mjs reset",
+    "db:test": "node scripts/portable-db.mjs test",
+    "db:local:stop": "node scripts/portable-db.mjs stop",
     "lint": "eslint . --report-unused-disable-directives --max-warnings 0",
     "test:e2e": "playwright test",
     "test:e2e:ui": "playwright test --ui"
   },
   "dependencies": {
+    "@supabase/supabase-js": "^2.105.4",
     "react": "^18.3.1",
     "react-dom": "^18.3.1"
   },

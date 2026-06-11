@@ -24,6 +24,9 @@ const Header: React.FC<HeaderProps> = ({ onCtaClick }) => (
         <a href="#cta" className="hover:text-primary-600">
           Get started
         </a>
+        <a href="#auth" className="hover:text-primary-600">
+          Log in
+        </a>
         <button
           type="button"
           onClick={onCtaClick}

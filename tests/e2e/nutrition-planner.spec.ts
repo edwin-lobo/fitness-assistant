@@ -34,7 +34,7 @@ test.describe('nutrition planner', () => {
   });
 
   test('keeps share output in sync with the selected plan', async ({ page }) => {
-    const shareOutput = page.getByRole('textbox').last();
+    const shareOutput = page.getByLabel('Selected share output');
 
     await expect(shareOutput).toContainText('Fitness Assistant weekly nutrition plan');
     await expect(shareOutput).toContainText('Mon: Breakfast - Protein overnight oats');
@@ -63,7 +63,7 @@ test.describe('nutrition planner', () => {
   });
 
   test('supports grocery-only and reusable template share formats', async ({ page }) => {
-    const shareOutput = page.getByRole('textbox').last();
+    const shareOutput = page.getByLabel('Selected share output');
 
     await page.getByLabel('Output format').selectOption('Groceries only');
 

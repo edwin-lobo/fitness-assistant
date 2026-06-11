@@ -19,6 +19,9 @@ npm run dev
 
 If your environment restricts access to the npm registry, configure the registry that works for you before running `npm install`.
 
+For Supabase-backed login, copy `.env.example` to `.env.local` and fill in `VITE_SUPABASE_URL` and
+`VITE_SUPABASE_ANON_KEY`. See `docs/supabase-auth.md` for the role schema and RLS setup.
+
 ## Scripts
 
 ```bash
@@ -47,11 +50,18 @@ Implemented across the nutrition MVP branch:
 - Processed-food reduction guidance tied to planned meals.
 - Playwright browser coverage for the main nutrition workflow.
 
+## Authentication
+
+Supabase Auth powers login and signup. Public signup supports `provider` and `client` accounts. `admin` and `mod`
+roles are invite-only and should be assigned by existing admins or trusted server-side tooling.
+
 Related docs:
 
 - `docs/nutrition-mvp-spec.md` defines scope, out-of-scope items, and success metrics.
 - `docs/nutrition-workflow.md` explains the current user workflow and manual grocery-app handoff.
 - `docs/nutrition-data-model.md` documents the household, member, meal template, weekly plan, and grocery checklist model.
+- `docs/supabase-activity-check.md` documents a lightweight hosted Supabase smoke check for active MVP environments.
+- `docs/portable-postgres.md` documents the local Podman/Docker Postgres test harness for relational portability.
 - `docs/backlog/nutrition-mvp-backlog.md` links the nutrition backlog issues and priority sequence.
 - `docs/testing.md` explains local and CI test coverage.
 

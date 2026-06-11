@@ -232,6 +232,7 @@ const NutritionPlanner: React.FC = () => {
               </div>
             </div>
             <textarea
+              aria-label="Selected share output"
               className="mt-4 h-48 w-full rounded-md border border-slate-200 bg-slate-50 p-3 text-xs leading-relaxed text-slate-700"
               readOnly
               value={shareText}

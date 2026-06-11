@@ -4,7 +4,9 @@ The repo uses three checks for the current MVP:
 
 - ESLint for static code checks.
 - Vite production build for compile and bundling checks.
+- Node unit tests for deterministic feature logic and local tooling behavior.
 - Playwright for browser-level nutrition planner workflows.
+- Portable Postgres tests for relational schema behavior before hosted Supabase deployment.
 
 ## Local checks
 
@@ -13,10 +15,31 @@ Run all checks before marking the PR ready:
 ```bash
 npm run lint
 npm run build
+npm run test:unit
+npm run test:portable-db
+npm run db:test
 npm run test:e2e
 ```
 
 The Playwright config starts `npm run preview` automatically against the built app.
+
+`npm run db:test` starts the local Postgres container with Docker-compatible commands, applies the local Supabase compatibility bootstrap, applies Supabase migrations, and runs SQL assertions from `database/tests`.
+
+## Unit test standard
+
+Add or update unit tests when implementing new feature logic or modifying existing behavior. Use unit tests for deterministic rules such as data transforms, formatting, filtering, role helpers, generated request shapes, and command argument builders. Keep browser tests focused on full user workflows.
+
+The unit suite runs with Node's built-in test runner:
+
+```bash
+npm run test:unit
+```
+
+Current unit coverage includes:
+
+- nutrition grocery aggregation, lower-processed swaps, template cloning, and share output
+- Supabase activity-check request construction and failure handling
+- portable database runner command construction
 
 If the Chromium browser is not installed locally, run:
 
@@ -48,6 +71,7 @@ The workflow:
 - installs the Chromium Playwright browser,
 - runs `npm run lint`,
 - runs `npm run build`,
+- runs `npm run test:unit`,
 - runs `npm run test:e2e`,
 - uploads the Playwright report artifact when available.
 
