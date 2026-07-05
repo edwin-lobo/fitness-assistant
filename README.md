@@ -55,6 +55,17 @@ Implemented across the nutrition MVP branch:
 Supabase Auth powers login and signup. Public signup supports `provider` and `client` accounts. `admin` and `mod`
 roles are invite-only and should be assigned by existing admins or trusted server-side tooling.
 
+## Infrastructure
+
+`infra/terraform/` provisions an Azure-native stack that replaces the hosted Supabase dependency, aligned with the
+homelab spec (fitness-assistant is the Azure project; Databricks is its key service). It covers PostgreSQL Flexible
+Server (the `profiles` database), Azure AD B2C (auth), Key Vault (secrets), and a Databricks workspace for
+nutrition/wellness pipelines.
+
+This is **backend infrastructure only** — the frontend stays on GitHub Pages, and the app code still uses
+`@supabase/supabase-js`. Rewiring `src/lib/` to the Azure SDKs is a tracked follow-up. See
+`infra/terraform/README.md` for the Supabase → Azure mapping and apply steps.
+
 Related docs:
 
 - `docs/nutrition-mvp-spec.md` defines scope, out-of-scope items, and success metrics.
@@ -64,6 +75,7 @@ Related docs:
 - `docs/portable-postgres.md` documents the local Podman/Docker Postgres test harness for relational portability.
 - `docs/backlog/nutrition-mvp-backlog.md` links the nutrition backlog issues and priority sequence.
 - `docs/testing.md` explains local and CI test coverage.
+- `infra/terraform/README.md` documents the Azure Terraform stack that replaces Supabase (Postgres, Azure AD B2C, Key Vault, Databricks).
 
 ## Testing
 
@@ -97,6 +109,7 @@ For a custom domain, set the repository variable `PAGES_CNAME`. The workflow wri
 
 - `src/components/` contains React UI sections and reusable page blocks.
 - `src/data/nutrition.ts` contains the nutrition domain model, seed data, grocery generation, and share-output helpers.
+- `infra/terraform/` contains the Azure Terraform stack (Postgres, Azure AD B2C, Key Vault, Databricks) that replaces Supabase.
 - `tests/e2e/` contains Playwright browser tests.
 - `.github/workflows/ci.yml` runs PR verification.
 - `.github/workflows/deploy-pages.yml` publishes the static build to GitHub Pages.

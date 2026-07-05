@@ -1,0 +1,22 @@
+# Copy this file to terraform.tfvars and fill in your values.
+# terraform.tfvars is gitignored — never commit it.
+#
+# Where to find each value:
+#   subscription_id    → `az account show --query id -o tsv`
+#   location           → any Azure region, e.g. eastus, westus2, westeurope
+#   admin_ip_address   → `curl -s ifconfig.me` (opens a Postgres firewall rule
+#                        so you can load the profiles schema over psql). Leave
+#                        empty ("") to skip the operator rule.
+#   b2c_data_residency → United States | Europe | Asia Pacific | Australia
+
+subscription_id    = "00000000-0000-0000-0000-000000000000"
+location           = "eastus"
+admin_ip_address   = ""
+
+# Optional overrides (defaults are usually fine):
+# project            = "fitness-assistant"
+# environment        = "prod"
+# databricks_sku     = "premium"
+# b2c_country_code   = "US"
+# b2c_data_residency = "United States"
+# extra_tags         = { owner = "loobo07" }
