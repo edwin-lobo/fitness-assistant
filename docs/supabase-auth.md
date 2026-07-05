@@ -2,6 +2,12 @@
 
 Fitness Assistant uses Supabase Auth for login and a `profiles` table for application roles.
 
+> **Migration note:** The infrastructure is moving to Azure — `infra/terraform/` provisions Azure AD B2C
+> (auth) and a PostgreSQL Flexible Server (the `profiles` database) to replace Supabase. This doc still
+> describes the live app, which uses Supabase until `src/lib/` is rewired to the Azure SDKs. The role model
+> below (`provider`/`client` public, `admin`/`mod` managed) carries over unchanged. See
+> `infra/terraform/README.md`.
+
 ## Roles
 
 The application role enum is:
